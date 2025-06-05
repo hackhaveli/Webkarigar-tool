@@ -5406,3 +5406,26 @@
 2025-04-21 21:25:59,148 - INFO - Attempting to send email to learnhaveli@gmail.com from info@jede-website-kontakt.de using smtp.hostinger.com
 2025-04-21 21:26:02,846 - INFO - Email sent successfully to learnhaveli@gmail.com
 2025-04-21 21:26:02,854 - INFO - 127.0.0.1 - - [21/Apr/2025 21:26:02] "POST /email_campaign/email-sender/send HTTP/1.1" 200 -
+2025-06-05 12:47:01,253 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:8080
+2025-06-05 12:47:01,254 - INFO - [33mPress CTRL+C to quit[0m
+2025-06-05 12:47:01,257 - INFO -  * Restarting with stat
+2025-06-05 12:47:03,392 - WARNING -  * Debugger is active!
+2025-06-05 12:47:03,400 - INFO -  * Debugger PIN: 330-602-124
+2025-06-05 12:47:04,473 - INFO - 127.0.0.1 - - [05/Jun/2025 12:47:04] "GET / HTTP/1.1" 200 -
+2025-06-05 12:47:04,518 - INFO - 127.0.0.1 - - [05/Jun/2025 12:47:04] "[33mGET /nan HTTP/1.1[0m" 404 -
+2025-06-05 12:47:04,572 - INFO - 127.0.0.1 - - [05/Jun/2025 12:47:04] "GET /static/css/style.css HTTP/1.1" 200 -
+2025-06-05 12:47:04,766 - INFO - 127.0.0.1 - - [05/Jun/2025 12:47:04] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+2025-06-05 12:47:09,515 - INFO - 127.0.0.1 - - [05/Jun/2025 12:47:09] "[32mPOST /start_scraping HTTP/1.1[0m" 302 -
+2025-06-05 12:47:09,525 - INFO - Starting to scrape 4 websites
+2025-06-05 12:47:09,534 - INFO - 127.0.0.1 - - [05/Jun/2025 12:47:09] "GET / HTTP/1.1" 200 -
+2025-06-05 12:47:09,582 - INFO - 127.0.0.1 - - [05/Jun/2025 12:47:09] "[33mGET /nan HTTP/1.1[0m" 404 -
+2025-06-05 12:47:09,583 - INFO - 127.0.0.1 - - [05/Jun/2025 12:47:09] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-06-05 12:47:09,610 - INFO - 127.0.0.1 - - [05/Jun/2025 12:47:09] "GET /status HTTP/1.1" 200 -
+2025-06-05 12:47:10,684 - INFO - 127.0.0.1 - - [05/Jun/2025 12:47:10] "GET /status HTTP/1.1" 200 -
+2025-06-05 12:47:11,395 - INFO - Results saved to leads.csv
+2025-06-05 12:47:11,396 - INFO - Scraping completed. Success: 4/4
+2025-06-05 12:47:11,696 - INFO - 127.0.0.1 - - [05/Jun/2025 12:47:11] "GET /status HTTP/1.1" 200 -
+2025-06-05 12:47:11,723 - INFO - 127.0.0.1 - - [05/Jun/2025 12:47:11] "GET / HTTP/1.1" 200 -
+2025-06-05 12:47:11,757 - INFO - 127.0.0.1 - - [05/Jun/2025 12:47:11] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+2025-06-05 12:47:11,758 - INFO - 127.0.0.1 - - [05/Jun/2025 12:47:11] "[33mGET /nan HTTP/1.1[0m" 404 -
