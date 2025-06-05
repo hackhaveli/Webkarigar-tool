@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Email Sender</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <style>
+        body {
+            padding-top: 20px;
+            background-color: #f8f9fa;
+        }
+        .container {
+            max-width: 1200px;
+        }
+        .card {
+            margin-bottom: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .preview-container {
+            border: 1px solid #ddd;
+            padding: 20px;
+            background-color: white;
+            border-radius: 5px;
+            min-height: 400px;
+        }
+        .table-responsive {
+            max-height: 500px;
+            overflow-y: auto;
+        }
+        .template-option {
+            cursor: pointer;
+            border: 2px solid transparent;
+            padding: 10px;
+            border-radius: 5px;
+            transition: all 0.3s;
+        }
+        .template-option:hover, .template-option.selected {
+            border-color: #0d6efd;
+            background-color: #f0f7ff;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="text-center mb-4">Email Campaign Sender</h1>
+        
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-{{ 'success' if message.category == 'success' else 'danger' }}" role="alert">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+        
+        <div class="row">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="mb-0">Email Configuration</h5>
+                    </div>
+                    <div class="card-body">
+                        <form id="emailForm" action="/email_campaign/email-sender/send" method="post">
+                            <div class="mb-3">
+                                <div class="form-check mb-2">
+                                    <input class="form-check-input" type="checkbox" id="useRotation" name="use_rotation">
+                                    <label class="form-check-label" for="useRotation">
+                                        <span class="text-primary fw-bold">Enable Email Rotation</span> (Automatically rotate through all Hostinger emails with 1-second delay)
+                                    </label>
+                                </div>
+                                <label for="senderEmail" class="form-label">Sender Email</label>
+                                <select class="form-select" id="senderEmail" name="sender_email">
+                                    <option value="" disabled selected>-- Select Email Account --</option>
+                                    <optgroup label="Strato Mail Servers (smtp.strato.de)">
+                                        <option value="info@mail-jede-website.de">info@mail-jede-website.de</option>
+                                        <option value="info@jede-website-mail.de">info@jede-website-mail.de</option>
+                                        <option value="info@jede-website-email.de">info@jede-website-email.de</option>
+                                        <option value="info@email-jede-website.de">info@email-jede-website.de</option>
+                                    </optgroup>
+                                    <optgroup label="Hostinger Mail Servers (smtp.hostinger.com)">
+                                        <option value="info@jede-website-info.de">info@jede-website-info.de</option>
+                                        <option value="kontakt@info-jede-website.de">kontakt@info-jede-website.de</option>
+                                        <option value="info@kontakt-jede-website.de">info@kontakt-jede-website.de</option>
+                                        <option value="info@jede-website-kontakt.de">info@jede-website-kontakt.de</option>
+                                        <option value="kontakt@info-website-jede.de">kontakt@info-website-jede.de</option>
+                                        <option value="info@kontakt-website-jede.de">info@kontakt-website-jede.de</option>
+                                        <option value="info@email-website-jede.de">info@email-website-jede.de</option>
+                                        <option value="info@jede-webseite.de">info@jede-webseite.de</option>
+                                        <option value="kontakt@info-jede-webseite.de">kontakt@info-jede-webseite.de</option>
+                                        <option value="info@email-jede-webseite.de">info@email-jede-webseite.de</option>
+                                        <option value="kontakt@jede-webseite-info.de">kontakt@jede-webseite-info.de</option>
+                                        <option value="info@jede-webseite-kontakt.de">info@jede-webseite-kontakt.de</option>
+                                        <option value="info@jede-webseite-mail.de">info@jede-webseite-mail.de</option>
+                                        <option value="info@jede-webseite-email.de">info@jede-webseite-email.de</option>
+                                    </optgroup>
+                                </select>
+                                <div class="form-text">Select the email account you want to send from</div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="senderPassword" class="form-label">Email Password</label>
+                                <div class="input-group">
+                                    <input type="password" class="form-control" id="senderPassword" name="sender_password" value="Bubatz2006!?" required>
+                                    <button class="btn btn-outline-secondary" type="button" id="togglePassword">
+                                        <i class="bi bi-eye"></i> Show
+                                    </button>
+                                </div>
+                                <div class="form-text text-danger">Password: Bubatz2006!?</div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="subject" class="form-label">Email Subject</label>
+                                <input type="text" class="form-control" id="subject" name="subject" value="Your Custom Website Template" required>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Template Style</label>
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <div class="template-option" data-template="elegant">
+                                            <div class="text-center">
+                                                <img src="https://via.placeholder.com/100x60?text=Elegant" alt="Elegant Template" class="img-fluid mb-2">
+                                                <div>Elegant</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="template-option" data-template="minimalist">
+                                            <div class="text-center">
+                                                <img src="https://via.placeholder.com/100x60?text=Minimalist" alt="Minimalist Template" class="img-fluid mb-2">
+                                                <div>Minimalist</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="template-option" data-template="modern">
+                                            <div class="text-center">
+                                                <img src="https://via.placeholder.com/100x60?text=Modern" alt="Modern Template" class="img-fluid mb-2">
+                                                <div>Modern</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <input type="hidden" id="templateType" name="template_type" value="elegant">
+                            </div>
+                            
+                            <div class="d-grid gap-2">
+                                <button type="button" id="previewBtn" class="btn btn-info">Preview Email</button>
+                                <button type="submit" class="btn btn-success">Send Selected Emails</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header bg-secondary text-white">
+                        <h5 class="mb-0">Email Preview</h5>
+                    </div>
+                    <div class="card-body">
+                        <div id="previewContainer" class="preview-container">
+                            <div class="text-center text-muted p-5">
+                                <h3>Email Preview</h3>
+                                <p>Select a lead and click "Preview Email" to see how your email will look.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0">Leads</h5>
+                        <div>
+                            <button id="selectAllBtn" class="btn btn-sm btn-outline-light">Select All</button>
+                            <button id="deselectAllBtn" class="btn btn-sm btn-outline-light">Deselect All</button>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th width="40">
+                                            <input type="checkbox" id="masterCheckbox" class="form-check-input">
+                                        </th>
+                                        <th>Business</th>
+                                        <th>Email</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for lead in leads %}
+                                    <tr>
+                                        <td>
+                                            <input type="checkbox" name="selected_leads" value="{{ loop.index0 }}" class="form-check-input lead-checkbox" form="emailForm">
+                                        </td>
+                                        <td>{{ lead.business_name }}</td>
+                                        <td>{{ lead.email }}</td>
+                                        <td>
+                                            <button type="button" class="btn btn-sm btn-primary preview-single" data-index="{{ loop.index0 }}">
+                                                Preview
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header bg-info text-white">
+                        <h5 class="mb-0">Email Logs</h5>
+                    </div>
+                    <div class="card-body">
+                        <a href="/logs" class="btn btn-outline-info w-100">View Email Logs</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            // Handle email rotation checkbox
+            $('#useRotation').change(function() {
+                if($(this).is(':checked')) {
+                    // Disable email selector when rotation is enabled
+                    $('#senderEmail').prop('disabled', true);
+                    $('#senderEmail').prop('required', false);
+                } else {
+                    // Enable email selector when rotation is disabled
+                    $('#senderEmail').prop('disabled', false);
+                    $('#senderEmail').prop('required', true);
+                }
+            });
+            
+            // Initial check
+            $('#useRotation').trigger('change');
+        });
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            // Toggle password visibility
+            const togglePasswordBtn = document.getElementById('togglePassword');
+            const passwordInput = document.getElementById('senderPassword');
+            
+            togglePasswordBtn.addEventListener('click', function() {
+                if (passwordInput.type === 'password') {
+                    passwordInput.type = 'text';
+                    this.innerHTML = '<i class="bi bi-eye-slash"></i> Hide';
+                } else {
+                    passwordInput.type = 'password';
+                    this.innerHTML = '<i class="bi bi-eye"></i> Show';
+                }
+            });
+            
+            // Template selection
+            const templateOptions = document.querySelectorAll('.template-option');
+            const templateTypeInput = document.getElementById('templateType');
+            
+            templateOptions.forEach(option => {
+                option.addEventListener('click', function() {
+                    templateOptions.forEach(o => o.classList.remove('selected'));
+                    this.classList.add('selected');
+                    templateTypeInput.value = this.dataset.template;
+                });
+            });
+            
+            // Select the first template by default
+            templateOptions[0].classList.add('selected');
+            
+            // Master checkbox
+            const masterCheckbox = document.getElementById('masterCheckbox');
+            const leadCheckboxes = document.querySelectorAll('.lead-checkbox');
+            
+            masterCheckbox.addEventListener('change', function() {
+                leadCheckboxes.forEach(checkbox => {
+                    checkbox.checked = this.checked;
+                });
+            });
+            
+            // Select/Deselect All buttons
+            document.getElementById('selectAllBtn').addEventListener('click', function() {
+                leadCheckboxes.forEach(checkbox => {
+                    checkbox.checked = true;
+                });
+                masterCheckbox.checked = true;
+            });
+            
+            document.getElementById('deselectAllBtn').addEventListener('click', function() {
+                leadCheckboxes.forEach(checkbox => {
+                    checkbox.checked = false;
+                });
+                masterCheckbox.checked = false;
+            });
+            
+            // Preview functionality
+            document.getElementById('previewBtn').addEventListener('click', function() {
+                const selectedLead = document.querySelector('.lead-checkbox:checked');
+                if (!selectedLead) {
+                    alert('Please select at least one lead to preview');
+                    return;
+                }
+                
+                previewEmail(selectedLead.value);
+            });
+            
+            // Individual preview buttons
+            document.querySelectorAll('.preview-single').forEach(button => {
+                button.addEventListener('click', function() {
+                    previewEmail(this.dataset.index);
+                    
+                    // Also check the corresponding checkbox
+                    document.querySelector(`.lead-checkbox[value="${this.dataset.index}"]`).checked = true;
+                });
+            });
+            
+            function previewEmail(leadIndex) {
+                console.log('Preview requested for lead index:', leadIndex);
+                
+                // Create a simple data object instead of FormData
+                var previewData = {
+                    lead_index: leadIndex,
+                    template_type: $('#templateType').val(),
+                    sender_email: $('#senderEmail').val() || 'example@email.com',
+                    subject: $('#subject').val() || 'Your Custom Website Template'
+                };
+                
+                console.log('Sending preview request with data:', previewData);
+                
+                // Use jQuery AJAX with traditional parameters
+                $.ajax({
+                    url: '/email_campaign/email-sender/preview',
+                    type: 'POST',
+                    data: previewData,
+                    dataType: 'json',
+                    success: function(data) {
+                        console.log('Preview response received:', data);
+                        
+                        if (data.error) {
+                            alert(data.error);
+                            return;
+                        }
+                        
+                        const previewHtml = `
+                            <div class="email-preview">
+                                <div class="mb-3">
+                                    <strong>From:</strong> ${data.sender_email}
+                                </div>
+                                <div class="mb-3">
+                                    <strong>To:</strong> ${data.recipient}
+                                </div>
+                                <div class="mb-3">
+                                    <strong>Subject:</strong> ${data.subject}
+                                </div>
+                                <hr>
+                                <div class="email-body">
+                                    <h2>Hello ${data.business_name}</h2>
+                                    ${data.logo ? `<img src="${data.logo}" alt="${data.business_name} Logo" style="max-width: 200px; max-height: 80px; margin-bottom: 15px;">` : ''}
+                                    <p>We've created beautiful website templates for your business.</p>
+                                    <p>Please find below three different design options for your consideration:</p>
+                                    
+                                    <div style="margin-bottom: 25px; padding: 15px; border: 1px solid #ddd; border-radius: 5px;">
+                                        <div style="font-weight: bold; margin-bottom: 10px;">Elegant Design</div>
+                                        <p>A sophisticated and professional design with elegant typography and layout.</p>
+                                        <p>View it here: <a href="${data.elegant_url}" target="_blank">${data.elegant_url}</a></p>
+                                    </div>
+                                    
+                                    <div style="margin-bottom: 25px; padding: 15px; border: 1px solid #ddd; border-radius: 5px;">
+                                        <div style="font-weight: bold; margin-bottom: 10px;">Minimalist Design</div>
+                                        <p>A clean, simple design focusing on content with minimal distractions.</p>
+                                        <p>View it here: <a href="${data.minimalist_url}" target="_blank">${data.minimalist_url}</a></p>
+                                    </div>
+                                    
+                                    <div style="margin-bottom: 25px; padding: 15px; border: 1px solid #ddd; border-radius: 5px;">
+                                        <div style="font-weight: bold; margin-bottom: 10px;">Modern Design</div>
+                                        <p>A contemporary design with modern elements and visual appeal.</p>
+                                        <p>View it here: <a href="${data.modern_url}" target="_blank">${data.modern_url}</a></p>
+                                    </div>
+                                    
+                                    <p>Please let us know which design you prefer or if you'd like any customizations.</p>
+                                </div>
+                            </div>
+                        `;
+                        
+                        $('#previewContainer').html(previewHtml);
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('AJAX Error:', status, error);
+                        console.log('Response text:', xhr.responseText);
+                        alert('Error generating preview. See console for details.');
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>

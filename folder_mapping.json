@@ -1,0 +1,12 @@
+{
+  "Wallofgardens": {
+    "main_folder": "000019",
+    "inner_folder": "wallofgardens",
+    "domain": "wallofgardens"
+  },
+  "wallofgardens": {
+    "main_folder": "000019",
+    "inner_folder": "wallofgardens",
+    "website_folder": "Wallofgardens"
+  }
+}

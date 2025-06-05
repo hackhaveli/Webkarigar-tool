@@ -1,0 +1,17 @@
+{
+  "wallofgardens": {
+    "ftp_name": "wallofgardens",
+    "main_folder": "000019",
+    "inner_folder": "wallofgardens"
+  },
+  "www.wallofgardens": {
+    "ftp_name": "Wallofgardens",
+    "main_folder": "000019",
+    "inner_folder": "wallofgardens"
+  },
+  "wallofgardens.com": {
+    "main_folder": "000019",
+    "inner_folder": "wallofgardens",
+    "ftp_name": "wallofgardens.com"
+  }
+}

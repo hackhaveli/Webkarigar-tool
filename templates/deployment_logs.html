@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Deployment Logs</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <style>
+        body {
+            background-color: #f8fafc;
+            color: #333;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+        }
+        .log-card {
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+            transition: all 0.3s ease;
+            border: 1px solid #eaedf2;
+            margin-bottom: 20px;
+        }
+        .log-header {
+            padding: 15px 20px;
+            border-bottom: 1px solid #eaedf2;
+        }
+        .log-body {
+            padding: 20px;
+        }
+        .success-header {
+            background-color: #ecfdf5;
+            border-left: 4px solid #10b981;
+        }
+        .failure-header {
+            background-color: #fef2f2;
+            border-left: 4px solid #ef4444;
+        }
+        .log-timestamp {
+            font-size: 0.9rem;
+            color: #64748b;
+        }
+        .url-list {
+            max-height: 200px;
+            overflow-y: auto;
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            padding: 10px;
+            font-size: 0.9rem;
+        }
+        .config-card {
+            background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+            color: white;
+            border-radius: 16px;
+            padding: 25px;
+            margin-bottom: 30px;
+            box-shadow: 0 15px 30px rgba(124, 58, 237, 0.12);
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        .subdomain-guide {
+            background-color: white;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+            border: 1px solid #eaedf2;
+            margin-top: 30px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container py-5">
+        <div class="mb-4">
+            <a href="{{ url_for('template_gallery') }}" class="btn btn-outline-secondary py-2 px-4 rounded-pill">
+                <i class='bx bx-arrow-back me-2'></i> Back to Template Gallery
+            </a>
+        </div>
+        
+        <div class="row mb-4">
+            <div class="col-md-8">
+                <h1 class="display-5 mb-1">Deployment Logs</h1>
+                <p class="text-muted">View your recent template deployments and their details</p>
+            </div>
+        </div>
+        
+        <div class="row">
+            <div class="col-md-4">
+                <div class="config-card">
+                    <h5 class="border-bottom border-white border-opacity-25 pb-3 mb-3">FTP Configuration</h5>
+                    <div class="mb-2">
+                        <small class="text-white-50">Server:</small>
+                        <div>{{ ftp_config.host }}</div>
+                    </div>
+                    <div class="mb-2">
+                        <small class="text-white-50">Username:</small>
+                        <div>{{ ftp_config.username }}</div>
+                    </div>
+                    <div class="mb-2">
+                        <small class="text-white-50">Base Path:</small>
+                        <div>{{ ftp_config.base_path }}</div>
+                    </div>
+                    <div class="mb-0">
+                        <small class="text-white-50">Access URL:</small>
+                        <div>https://eblastar.de/templates/</div>
+                    </div>
+                </div>
+                
+                <div class="subdomain-guide">
+                    <h5 class="border-bottom pb-2 mb-3">Linking with Subdomains</h5>
+                    <p>To use a subdomain for your templates:</p>
+                    <ol>
+                        <li class="mb-2">Log into your hosting control panel</li>
+                        <li class="mb-2">Create a new subdomain (e.g., <code>template1.eblastar.de</code>)</li>
+                        <li class="mb-2">Set the document root to the template folder:<br>
+                            <code class="text-break">/domains/eblastar.de/public_html/templates/[template_folder]/[style]</code>
+                        </li>
+                        <li>Or create a URL redirect from your subdomain to the template URL</li>
+                    </ol>
+                    <div class="alert alert-info mt-3 mb-0">
+                        <i class='bx bx-info-circle me-2'></i>
+                        For assistance, contact your hosting provider.
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-8">
+                {% if deployment_history %}
+                    {% for log in deployment_history|reverse %}
+                        <div class="log-card">
+                            <div class="log-header {% if log.success %}success-header{% else %}failure-header{% endif %}">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <h5 class="mb-0">
+                                        {% if log.success %}
+                                            <i class='bx bx-check-circle text-success me-2'></i> Deployment Successful
+                                        {% else %}
+                                            <i class='bx bx-x-circle text-danger me-2'></i> Deployment Failed
+                                        {% endif %}
+                                    </h5>
+                                    <span class="log-timestamp">
+                                        <i class='bx bx-time-five me-1'></i> {{ log.timestamp }}
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="log-body">
+                                <div class="row mb-3">
+                                    <div class="col-md-4">
+                                        <strong>Server:</strong>
+                                    </div>
+                                    <div class="col-md-8">
+                                        {{ log.server }}
+                                    </div>
+                                </div>
+                                <div class="row mb-3">
+                                    <div class="col-md-4">
+                                        <strong>Target Directory:</strong>
+                                    </div>
+                                    <div class="col-md-8">
+                                        {{ log.target_directory }}
+                                    </div>
+                                </div>
+                                
+                                {% if log.success %}
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <strong>Deployed URLs:</strong>
+                                            <div class="url-list mt-2">
+                                                {% for folder, url in log.result.items() %}
+                                                    <div class="mb-2">
+                                                        <strong>{{ folder }}:</strong>
+                                                        <a href="{{ url }}" target="_blank" class="text-decoration-none">
+                                                            {{ url }} <i class='bx bx-link-external'></i>
+                                                        </a>
+                                                    </div>
+                                                {% endfor %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% else %}
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <div class="alert alert-danger">
+                                                <strong>Error:</strong> {{ log.result }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <div class="alert alert-info">
+                        <i class='bx bx-info-circle me-2'></i>
+                        No deployment logs found. Deploy some templates to see the history.
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html> 

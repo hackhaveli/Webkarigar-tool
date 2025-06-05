@@ -1,0 +1,17 @@
+{
+  "folder_counter": 6,
+  "base_url": "https://www.jede-website.de/templates/",
+  "folder_mapping": {
+    "website_templates_20250419-154635": "5"
+  },
+  "deployed_urls": {
+    "website_templates_20250419-154635": {
+      "dudeperfect": "https://www.jede-website.de/5/Dudeperfect/index.html",
+      "kolus.shop_by_zach_king": "https://www.jede-website.de/5/kolus.shop_by_Zach_King/index.html",
+      "lillysingh.com": "https://www.jede-website.de/5/lillysingh.com/index.html",
+      "elegant": "https://www.jede-website.de/5/Dudeperfect/index.html",
+      "minimalist": "https://www.jede-website.de/5/Dudeperfect/index.html",
+      "modern": "https://www.jede-website.de/5/Dudeperfect/index.html"
+    }
+  }
+}

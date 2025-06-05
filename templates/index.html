@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Website Scraper</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar -->
+            <nav id="sidebar" class="col-md-3 col-lg-2 d-md-block bg-dark sidebar collapse">
+                <div class="position-sticky pt-3">
+                    <div class="text-center mb-4">
+                        <h4 class="text-white">Website Scraper</h4>
+                        <p class="text-muted">Global & German Sites</p>
+                    </div>
+                    <ul class="nav flex-column">
+                        <li class="nav-item">
+                            <a class="nav-link active" href="#">
+                                <i class='bx bx-home'></i> Dashboard
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#upload-section">
+                                <i class='bx bx-upload'></i> Upload CSV
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#results-section">
+                                <i class='bx bx-table'></i> Results
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('template_gallery') }}">
+                                <i class='bx bx-layout'></i> Template Gallery
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('email_campaign_page') }}">
+                                <i class='bx bx-envelope'></i> Email Campaign
+                            </a>
+                        </li>
+                    </ul>
+                    
+                    <hr class="text-light">
+                    
+                    <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
+                        <span>Scraping Status</span>
+                    </h6>
+                    <div class="px-3 py-2 text-light">
+                        <div id="status-container">
+                            {% if scraping_status.is_running %}
+                                <div class="alert alert-info animate__animated animate__pulse animate__infinite">
+                                    <strong>Scraping in progress!</strong>
+                                </div>
+                                <div class="progress mb-3">
+                                    <div id="progress-bar" class="progress-bar progress-bar-striped progress-bar-animated"
+                                         role="progressbar" 
+                                         style="width: {{ (scraping_status.completed / scraping_status.total * 100) if scraping_status.total > 0 else 0 }}%"></div>
+                                </div>
+                                <p>
+                                    <strong>Completed:</strong> <span id="completed-count">{{ scraping_status.completed }}</span> / <span id="total-count">{{ scraping_status.total }}</span><br>
+                                    <strong>Success:</strong> <span id="success-count">{{ scraping_status.success }}</span><br>
+                                    <strong>Failed:</strong> <span id="failed-count">{{ scraping_status.failed }}</span><br>
+                                    <strong>Time elapsed:</strong> <span id="time-elapsed">0s</span>
+                                </p>
+                            {% else %}
+                                <p>No active scraping job</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </nav>
+
+            <!-- Main content -->
+            <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+                <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                    <h1 class="h2">Website Data Scraper</h1>
+                    <div class="btn-toolbar mb-2 mb-md-0">
+                        {% if data %}
+                        <a href="{{ url_for('download_csv') }}" class="btn btn-sm btn-success me-2">
+                            <i class='bx bx-download'></i> Download CSV
+                        </a>
+                        <a href="{{ url_for('download_all_data') }}" class="btn btn-sm btn-primary me-2">
+                            <i class='bx bx-download'></i> Download All Data
+                        </a>
+                        <a href="{{ url_for('generate_templates') }}" class="btn btn-sm btn-warning me-2">
+                            <i class='bx bx-layout'></i> Generate Templates
+                        </a>
+                        <a href="{{ url_for('template_gallery') }}" class="btn btn-sm btn-secondary me-2">
+                            <i class='bx bx-grid-alt'></i> Template Gallery
+                        </a>
+                        <a href="{{ url_for('download_emails') }}" class="btn btn-sm btn-info me-2">
+                            <i class='bx bx-envelope'></i> Download Emails
+                        </a>
+                        <a href="{{ url_for('email_campaign_page') }}" class="btn btn-sm btn-danger me-2">
+                            <i class='bx bx-envelope'></i> Email Campaign
+                        </a>
+                        <a href="{{ url_for('quick_update_template_urls') }}" class="btn btn-sm btn-success me-2">
+                            <i class='bx bx-link'></i> Update Template URLs
+                        </a>
+                        {% endif %}
+                        <button type="button" class="btn btn-sm btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#helpModal">
+                            <i class='bx bx-help-circle'></i> Help
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Flash messages -->
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                    {% if messages %}
+                        {% for category, message in messages %}
+                            <div class="alert alert-{{ category }} alert-dismissible fade show animate__animated animate__fadeIn" role="alert">
+                                {{ message }}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                {% endwith %}
+
+                <!-- Upload Section -->
+                <section id="upload-section" class="mb-5">
+                    <div class="card">
+                        <div class="card-header bg-primary text-white">
+                            <h5 class="mb-0">1. Upload CSV File</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <form action="{{ url_for('upload_csv') }}" method="post" enctype="multipart/form-data" class="mb-3">
+                                        <div class="input-group">
+                                            <input type="file" class="form-control" name="csv_file" id="csv_file" accept=".csv">
+                                            <button class="btn btn-primary" type="submit">Upload</button>
+                                        </div>
+                                        <small class="text-muted">The CSV file must contain a column named 'url'</small>
+                                    </form>
+                                </div>
+                                <div class="col-md-6">
+                                    <form action="{{ url_for('add_url') }}" method="post" class="mb-3">
+                                        <div class="input-group">
+                                            <input type="text" class="form-control" name="new_url" id="new_url" placeholder="https://example.com">
+                                            <button class="btn btn-primary" type="submit">Add Single URL</button>
+                                        </div>
+                                        <small class="text-muted">Add a single URL to the scraping list</small>
+                                    </form>
+                                </div>
+                            </div>
+                            
+                            {% if data %}
+                                <div class="alert alert-success">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <div>
+                                            <i class='bx bx-check-circle'></i> CSV loaded with {{ data|length }} URLs
+                                        </div>
+                                        <form action="{{ url_for('clear_data') }}" method="post">
+                                            <button type="submit" class="btn btn-sm btn-outline-danger" onclick="return confirm('Are you sure you want to clear all scraped data? URLs will be kept.')">
+                                                <i class='bx bx-trash'></i> Clear Scraped Data
+                                            </button>
+                                        </form>
+                                    </div>
+                                </div>
+                            {% else %}
+                                <div class="alert alert-warning">
+                                    <i class='bx bx-error'></i> No CSV file loaded yet
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Scraping Section -->
+                <section id="scraping-section" class="mb-5">
+                    <div class="card">
+                        <div class="card-header bg-primary text-white">
+                            <h5 class="mb-0">2. Start Scraping</h5>
+                        </div>
+                        <div class="card-body">
+                            {% if data %}
+                                <form action="{{ url_for('start_scraping') }}" method="post">
+                                    <div class="mb-3">
+                                        <label for="max_workers" class="form-label">Number of concurrent workers:</label>
+                                        <input type="range" class="form-range" id="max_workers" name="max_workers" min="1" max="20" value="5" oninput="updateWorkerValue(this.value)">
+                                        <div class="d-flex justify-content-between">
+                                            <span>1 (Slower, more reliable)</span>
+                                            <span id="worker-value">5</span>
+                                            <span>20 (Faster, may overload)</span>
+                                        </div>
+                                        <small class="text-muted">Higher values may increase speed but also increase server load</small>
+                                    </div>
+                                    <button type="submit" class="btn btn-success btn-lg w-100" {% if scraping_status.is_running %}disabled{% endif %}>
+                                        <i class='bx bx-play'></i> Start Scraping
+                                    </button>
+                                    {% if scraping_status.is_running %}
+                                        <div class="text-center mt-2">
+                                            <span class="text-muted">Scraping is currently in progress</span>
+                                        </div>
+                                    {% endif %}
+                                </form>
+                            {% else %}
+                                <div class="alert alert-info">
+                                    <i class='bx bx-info-circle'></i> Please upload a CSV file first
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Template URL Section -->
+                {% if data %}
+                <section id="template-url-section" class="mb-5">
+                    <div class="card">
+                        <div class="card-header bg-success text-white">
+                            <h5 class="mb-0">3. Template URLs</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="row align-items-center">
+                                <div class="col-md-8">
+                                    <p class="mb-0">
+                                        <strong>Make sure all leads have template URLs</strong> before sending emails. 
+                                        Template URLs are required for the email campaign to show your website designs to leads.
+                                    </p>
+                                    
+                                    <!-- URL Statistics -->
+                                    <div class="mt-3">
+                                        <div class="progress mb-2" style="height: 20px;">
+                                            {% set percentage = (url_stats.with_urls / url_stats.total * 100) if url_stats.total > 0 else 0 %}
+                                            <div class="progress-bar bg-success" role="progressbar" style="width: {{ percentage }}%">
+                                                {{ url_stats.with_urls }} / {{ url_stats.total }} ({{ percentage|int }}%)
+                                            </div>
+                                        </div>
+                                        <div class="d-flex justify-content-between small">
+                                            <span>Total leads: <strong>{{ url_stats.total }}</strong></span>
+                                            <span>With URLs: <strong>{{ url_stats.with_urls }}</strong></span>
+                                            <span>Missing URLs: <strong>{{ url_stats.missing_urls }}</strong></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4 text-end">
+                                    <a href="{{ url_for('quick_update_template_urls') }}" class="btn btn-success">
+                                        <i class='bx bx-link'></i> Update All Template URLs
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                {% endif %}
+
+                <!-- Results Section -->
+                <section id="results-section" class="mb-5">
+                    <div class="card">
+                        <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+                            <h5 class="mb-0">4. Results</h5>
+                            {% if data %}
+                            <div>
+                                <a href="{{ url_for('download_csv') }}" class="btn btn-sm btn-light me-2">
+                                    <i class='bx bx-download'></i> Download CSV
+                                </a>
+                                <a href="{{ url_for('download_all_data') }}" class="btn btn-sm btn-light me-2">
+                                    <i class='bx bx-package'></i> Download All Data
+                                </a>
+                                <a href="{{ url_for('download_emails') }}" class="btn btn-sm btn-light">
+                                    <i class='bx bx-envelope'></i> Emails Only
+                                </a>
+                            </div>
+                            {% endif %}
+                        </div>
+                        <div class="card-body">
+                            {% if data %}
+                                <div class="table-responsive">
+                                    <table class="table table-striped table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th>#</th>
+                                                <th>URL</th>
+                                                <th>Business Name</th>
+                                                <th>Email</th>
+                                                <th>Logo</th>
+                                                <th>Services</th>
+                                                <th>Error</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for row in data %}
+                                                <tr>
+                                                    <td>{{ loop.index }}</td>
+                                                    <td><a href="{{ row.url }}" target="_blank" class="text-truncate d-inline-block" style="max-width: 180px;">{{ row.url }}</a></td>
+                                                    <td>{{ row.business_name or 'Not scraped yet' }}</td>
+                                                    <td>{{ row.email or 'Not scraped yet' }}</td>
+                                                    <td>
+                                                        {% if row.logo %}
+                                                            <a href="{{ row.logo }}" target="_blank" data-bs-toggle="tooltip" title="View Logo"><img src="{{ row.logo }}" alt="Logo" style="max-height: 30px; max-width: 80px;" onerror="this.onerror=null; this.src='https://via.placeholder.com/80x30?text=Logo+Error'"></a>
+                                                        {% else %}
+                                                            Not scraped yet
+                                                        {% endif %}
+                                                    </td>
+                                                    <td class="text-truncate" style="max-width: 200px;" data-bs-toggle="tooltip" data-bs-placement="top" title="{{ row.services }}">
+                                                        {{ row.services or 'Not scraped yet' }}
+                                                    </td>
+                                                    <td class="text-truncate" style="max-width: 150px;" data-bs-toggle="tooltip" data-bs-placement="top" title="{{ row.error }}">
+                                                        {{ row.error or '' }}
+                                                    </td>
+                                                </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            {% else %}
+                                <div class="alert alert-info">
+                                    <i class='bx bx-info-circle'></i> No data available yet. Please upload a CSV file and start scraping.
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </section>
+            </main>
+        </div>
+    </div>
+
+    <!-- Help Modal -->
+    <div class="modal fade" id="helpModal" tabindex="-1" aria-labelledby="helpModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="helpModalLabel">How to Use Website Scraper</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <h6>1. Prepare Your CSV File</h6>
+                    <p>Create a CSV file with a column named 'url' containing the list of websites you want to scrape.</p>
+                    
+                    <h6>2. Upload the CSV File</h6>
+                    <p>Use the upload section to upload your CSV file or add URLs individually.</p>
+                    
+                    <h6>3. Start Scraping</h6>
+                    <p>Click the "Start Scraping" button to begin the scraping process. You can adjust the number of concurrent workers to increase speed.</p>
+                    
+                    <h6>4. View Results</h6>
+                    <p>The results will appear in the table below as the scraping progresses. The following data will be extracted:</p>
+                    <ul>
+                        <li><strong>Business Name:</strong> Extracted from page title, headers, or metadata</li>
+                        <li><strong>Email:</strong> Contact email addresses found on the site</li>
+                        <li><strong>Logo:</strong> URL to the website's logo</li>
+                        <li><strong>Services:</strong> List of services provided by the business</li>
+                    </ul>
+                    
+                    <h6>5. Download Results</h6>
+                    <p>Once scraping is complete, you can:</p>
+                    <ul>
+                        <li><strong>Download CSV</strong> - Download the results as a simple CSV file</li>
+                        <li><strong>Download All Data</strong> - Get a complete package including:
+                            <ul>
+                                <li>Individual folder for each website</li>
+                                <li>Business details in text and JSON format</li>
+                                <li>Downloaded logos</li>
+                                <li>A complete index.html for easy browsing</li>
+                            </ul>
+                        </li>
+                        <li><strong>Generate Templates</strong> - Create website templates for each scraped website:
+                            <ul>
+                                <li>Three unique design styles per website (Modern, Elegant, Minimalist)</li>
+                                <li>Custom branded with business name, logo, and services</li>
+                                <li>Responsive designs that work on all devices</li>
+                                <li>Ready-to-use HTML/CSS files</li>
+                            </ul>
+                        </li>
+                        <li><strong>Template Gallery</strong> - Browse and preview all generated templates with:
+                            <ul>
+                                <li>Live template previews with iframes</li>
+                                <li>Ability to view full templates in new tabs</li>
+                                <li>Search and filter capabilities</li>
+                                <li>Statistics on generated templates</li>
+                            </ul>
+                        </li>
+                        <li><strong>Download Emails</strong> - Extract just the email addresses into a simple text file for easy copying or importing into other systems</li>
+                    </ul>
+                    
+                    <h6>German Site Compatibility</h6>
+                    <p>The scraper is optimized to handle German websites, including proper character encoding and German-specific content structures.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize tooltips
+            var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+            var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+                return new bootstrap.Tooltip(tooltipTriggerEl)
+            });
+            
+            // Only run the status update if scraping is in progress
+            if ({{ 'true' if scraping_status.is_running else 'false' }}) {
+                const startTime = {{ scraping_status.start_time or 'new Date().getTime() / 1000' }};
+                
+                function updateStatus() {
+                    fetch('/status')
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.is_running) {
+                                // Update progress bar
+                                const percent = data.total > 0 ? (data.completed / data.total * 100) : 0;
+                                document.getElementById('progress-bar').style.width = percent + '%';
+                                
+                                // Update counters
+                                document.getElementById('completed-count').textContent = data.completed;
+                                document.getElementById('total-count').textContent = data.total;
+                                document.getElementById('success-count').textContent = data.success;
+                                document.getElementById('failed-count').textContent = data.failed;
+                                
+                                // Calculate elapsed time
+                                const elapsed = Math.floor(new Date().getTime() / 1000 - startTime);
+                                const hours = Math.floor(elapsed / 3600);
+                                const minutes = Math.floor((elapsed % 3600) / 60);
+                                const seconds = elapsed % 60;
+                                let timeString = '';
+                                if (hours > 0) timeString += hours + 'h ';
+                                if (minutes > 0) timeString += minutes + 'm ';
+                                timeString += seconds + 's';
+                                document.getElementById('time-elapsed').textContent = timeString;
+                                
+                                // Schedule next update
+                                setTimeout(updateStatus, 1000);
+                            } else {
+                                // Scraping completed, reload page to show results
+                                window.location.reload();
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Error fetching status:', error);
+                            // Try again after a delay
+                            setTimeout(updateStatus, 5000);
+                        });
+                }
+                
+                // Start the status update loop
+                updateStatus();
+            }
+        });
+        
+        // Update worker slider value display
+        function updateWorkerValue(val) {
+            document.getElementById('worker-value').textContent = val;
+        }
+    </script>
+</body>
+</html> 

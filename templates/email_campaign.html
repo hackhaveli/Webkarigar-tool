@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Email Campaign Manager</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar -->
+            <nav id="sidebar" class="col-md-3 col-lg-2 d-md-block bg-dark sidebar collapse">
+                <div class="position-sticky pt-3">
+                    <div class="text-center mb-4">
+                        <h4 class="text-white">Website Scraper</h4>
+                        <p class="text-muted">Global & German Sites</p>
+                    </div>
+                    <ul class="nav flex-column">
+                        <li class="nav-item">
+                            <a class="nav-link" href="/">
+                                <i class='bx bx-home'></i> Dashboard
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/#upload-section">
+                                <i class='bx bx-upload'></i> Upload CSV
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/#results-section">
+                                <i class='bx bx-table'></i> Results
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('template_gallery') }}">
+                                <i class='bx bx-layout'></i> Template Gallery
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link active" href="{{ url_for('email_campaign_page') }}">
+                                <i class='bx bx-envelope'></i> Email Campaign
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+
+            <!-- Main content -->
+            <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+                <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                    <h1 class="h2">Email Campaign Manager</h1>
+                    <div class="btn-toolbar mb-2 mb-md-0">
+                        <a href="{{ url_for('index') }}" class="btn btn-sm btn-outline-secondary me-2">
+                            <i class='bx bx-home'></i> Back to Dashboard
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Flash messages -->
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                    {% if messages %}
+                        {% for category, message in messages %}
+                            <div class="alert alert-{{ category }} alert-dismissible fade show animate__animated animate__fadeIn" role="alert">
+                                {{ message }}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                {% endwith %}
+
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <div class="card">
+                                <div class="card-header bg-primary text-white">
+                                    <h5 class="mb-0">Campaign Controls</h5>
+                                </div>
+                                <div class="card-body">
+                                    <div class="row mb-4">
+                                        <div class="col-md-6">
+                                            <h6>Lead Statistics</h6>
+                                            <table class="table table-sm">
+                                                <tr>
+                                                    <td>Total Leads:</td>
+                                                    <td><strong>{{ csv_stats.total_leads }}</strong></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Stage 1 (Initial):</td>
+                                                    <td><strong>{{ csv_stats.stage1 }}</strong></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Stage 2 (Follow-up):</td>
+                                                    <td><strong>{{ csv_stats.stage2 }}</strong></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Stage 3 (Final):</td>
+                                                    <td><strong>{{ csv_stats.stage3 }}</strong></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Completed:</td>
+                                                    <td><strong>{{ csv_stats.completed }}</strong></td>
+                                                </tr>
+                                            </table>
+                                            <a href="/email-sender" target="_blank" class="btn btn-primary mt-3">
+                                                <i class="bx bx-mail-send"></i> Open Email Sender
+                                            </a>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <form method="post" action="{{ url_for('test_email') }}" class="mb-3">
+                                                <h6>Send Test Email</h6>
+                                                <div class="input-group mb-2">
+                                                    <input type="email" name="test_email" class="form-control" placeholder="your@email.com" required>
+                                                    <button type="submit" class="btn btn-primary">Send Test</button>
+                                                </div>
+                                                <div class="mb-2">
+                                                    <select name="sender_index" class="form-select form-select-sm">
+                                                        <option value="">-- Auto-select sender --</option>
+                                                        {% for domain in email_domains %}
+                                                            <option value="{{ loop.index0 }}">{{ domain.username }} ({{ domain.smtp_host }})</option>
+                                                        {% endfor %}
+                                                    </select>
+                                                </div>
+                                                <small class="text-muted">Send a test email to verify your configuration</small>
+                                            </form>
+                                            
+                                            <!-- Template URL Update Button (Prominent) -->
+                                            <div class="card mb-3 border-success">
+                                                <div class="card-body p-2">
+                                                    <h6 class="text-success mb-2"><i class="fas fa-link"></i> Template URLs</h6>
+                                                    <a href="{{ url_for('update_template_urls') }}" class="btn btn-success mb-2 w-100">Update Template URLs</a>
+                                                    <a href="{{ url_for('force_update_template_urls') }}" class="btn btn-warning mb-2 w-100">Force Generate URLs</a>
+                                                    <small class="text-muted d-block">
+                                                        <strong>Update:</strong> Click after template deployment to match existing templates<br>
+                                                        <strong>Force Generate:</strong> Creates URLs even if templates don't exist yet
+                                                    </small>
+                                                </div>
+                                            </div>
+                                            
+                                            <form method="post" action="{{ url_for('direct_test_email') }}" class="mb-3">
+                                                <h6>Direct Test (Troubleshooting)</h6>
+                                                <div class="input-group mb-2">
+                                                    <input type="email" name="test_email" class="form-control" placeholder="your@email.com" required>
+                                                    <button type="submit" class="btn btn-danger">Direct Send</button>
+                                                </div>
+                                                <div class="mb-2">
+                                                    <select name="sender_index" class="form-select form-select-sm">
+                                                        <option value="">-- Select specific sender --</option>
+                                                        {% for domain in email_domains %}
+                                                            <option value="{{ loop.index0 }}">{{ domain.username }} ({{ domain.smtp_host }})</option>
+                                                        {% endfor %}
+                                                    </select>
+                                                </div>
+                                                <small class="text-muted">Bypass normal sending for troubleshooting</small>
+                                            </form>
+                                        </div>
+                                    </div>
+                                    
+                                    <hr>
+                                    
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <h6>Run Email Campaign</h6>
+                                            
+                                            <!-- Email Status Display -->
+                                            <div id="email-progress-container" {% if not progress.is_running %}style="display:none"{% endif %} class="mb-3 p-3 border rounded bg-light">
+                                                <h6 class="text-primary">Email Campaign in Progress</h6>
+                                                <div class="progress mb-2">
+                                                    <div id="email-progress-bar" class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" 
+                                                         style="width: {{ (progress.sent / progress.total * 100) if progress.total > 0 else 0 }}%"></div>
+                                                </div>
+                                                <div class="d-flex justify-content-between small text-muted mb-2">
+                                                    <span>Sent: <span id="email-sent-count">{{ progress.sent }}</span> of <span id="email-total-count">{{ progress.total }}</span></span>
+                                                    <span>Errors: <span id="email-error-count">{{ progress.errors }}</span></span>
+                                                </div>
+                                                <div class="small text-muted">
+                                                    Current account: <span id="current-account">{{ progress.current_account }}</span><br>
+                                                    Stage: <span id="current-stage">{{ progress.current_stage }}</span><br>
+                                                    Last update: <span id="last-update">{{ progress.last_update }}</span>
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="d-flex flex-wrap justify-content-between">
+                                                <div class="me-2 mb-3" style="min-width: 120px; flex-basis: 23%;">
+                                                    <form method="post" action="{{ url_for('run_email_campaign_route') }}" class="mb-2">
+                                                        <button type="submit" class="btn btn-success w-100" {% if progress.is_running %}disabled{% endif %}>Run All Stages</button>
+                                                        <select name="sender_index" class="form-select form-select-sm mt-1">
+                                                            <option value="">-- Auto-select sender --</option>
+                                                            {% for domain in email_domains %}
+                                                                <option value="{{ loop.index0 }}">{{ domain.username }}</option>
+                                                            {% endfor %}
+                                                        </select>
+                                                    </form>
+                                                </div>
+                                                
+                                                <div class="me-2 mb-3" style="min-width: 120px; flex-basis: 23%;">
+                                                    <form method="post" action="{{ url_for('run_email_campaign_route') }}" class="mb-2">
+                                                        <input type="hidden" name="stage" value="1">
+                                                        <button type="submit" class="btn btn-primary w-100" {% if progress.is_running %}disabled{% endif %}>Run Stage 1 Only</button>
+                                                        <select name="sender_index" class="form-select form-select-sm mt-1">
+                                                            <option value="">-- Auto-select sender --</option>
+                                                            {% for domain in email_domains %}
+                                                                <option value="{{ loop.index0 }}">{{ domain.username }}</option>
+                                                            {% endfor %}
+                                                        </select>
+                                                    </form>
+                                                </div>
+                                                
+                                                <div class="me-2 mb-3" style="min-width: 120px; flex-basis: 23%;">
+                                                    <form method="post" action="{{ url_for('run_email_campaign_route') }}" class="mb-2">
+                                                        <input type="hidden" name="stage" value="2">
+                                                        <button type="submit" class="btn btn-info w-100" {% if progress.is_running %}disabled{% endif %}>Run Stage 2 Only</button>
+                                                        <select name="sender_index" class="form-select form-select-sm mt-1">
+                                                            <option value="">-- Auto-select sender --</option>
+                                                            {% for domain in email_domains %}
+                                                                <option value="{{ loop.index0 }}">{{ domain.username }}</option>
+                                                            {% endfor %}
+                                                        </select>
+                                                    </form>
+                                                </div>
+                                                
+                                                <div class="me-2 mb-3" style="min-width: 120px; flex-basis: 23%;">
+                                                    <form method="post" action="{{ url_for('run_email_campaign_route') }}" class="mb-2">
+                                                        <input type="hidden" name="stage" value="3">
+                                                        <button type="submit" class="btn btn-warning w-100" {% if progress.is_running %}disabled{% endif %}>Run Stage 3 Only</button>
+                                                        <select name="sender_index" class="form-select form-select-sm mt-1">
+                                                            <option value="">-- Auto-select sender --</option>
+                                                            {% for domain in email_domains %}
+                                                                <option value="{{ loop.index0 }}">{{ domain.username }}</option>
+                                                            {% endfor %}
+                                                        </select>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                            <small class="text-muted mt-2 d-block">
+                                                Emails are sent in the background. The system will:
+                                                <ul class="mt-1 mb-0">
+                                                    <li>Send up to 200 emails per stage</li>
+                                                    <li>Switch sending accounts every 10 emails</li>
+                                                    <li>Automatically update lead progress in the CSV</li>
+                                                </ul>
+                                            </small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="card mt-4">
+                                <div class="card-header bg-info text-white">
+                                    <h5 class="mb-0">Campaign History</h5>
+                                </div>
+                                <div class="card-body p-0">
+                                    <div class="table-responsive">
+                                        <table class="table table-hover mb-0">
+                                            <thead>
+                                                <tr>
+                                                    <th>Date/Time</th>
+                                                    <th>Total Sent</th>
+                                                    <th>Stage 1</th>
+                                                    <th>Stage 2</th>
+                                                    <th>Stage 3</th>
+                                                    <th>Errors</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {% if campaign_history %}
+                                                    {% for campaign in campaign_history|reverse %}
+                                                    <tr>
+                                                        <td>{{ campaign.start_time }}</td>
+                                                        <td>{{ campaign.stats.total_sent }}</td>
+                                                        <td>{{ campaign.stats.stage1_sent }}</td>
+                                                        <td>{{ campaign.stats.stage2_sent }}</td>
+                                                        <td>{{ campaign.stats.stage3_sent }}</td>
+                                                        <td>
+                                                            {% if campaign.stats.errors > 0 %}
+                                                                <span class="text-danger">{{ campaign.stats.errors }}</span>
+                                                            {% else %}
+                                                                {{ campaign.stats.errors }}
+                                                            {% endif %}
+                                                        </td>
+                                                    </tr>
+                                                    {% endfor %}
+                                                {% else %}
+                                                    <tr>
+                                                        <td colspan="6" class="text-center">No campaign history available</td>
+                                                    </tr>
+                                                {% endif %}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-4">
+                            <div class="card">
+                                <div class="card-header bg-secondary text-white">
+                                    <h5 class="mb-0">Email Accounts ({{ email_domains|length }})</h5>
+                                    <div class="small mt-1">
+                                        <span class="badge bg-success">{{ valid_accounts }} Working</span>
+                                        {% if invalid_accounts > 0 %}
+                                        <span class="badge bg-danger">{{ invalid_accounts }} Invalid</span>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                <div class="card-body p-0">
+                                    <div class="list-group list-group-flush">
+                                        {% for domain in email_domains %}
+                                        <div class="list-group-item">
+                                            <div><strong>{{ domain.username }}</strong></div>
+                                            <small class="text-muted">{{ domain.smtp_host }}:{{ domain.port }}</small>
+                                        </div>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="card mt-4">
+                                <div class="card-header bg-dark text-white">
+                                    <h5 class="mb-0">Instructions</h5>
+                                </div>
+                                <div class="card-body">
+                                    <h6>How it works:</h6>
+                                    <ol>
+                                        <li>Upload leads through the main page</li>
+                                        <li>Create website templates for your leads</li>
+                                        <li>Deploy templates to the server</li>
+                                        <li>Click "Update Template URLs" to match leads with their templates</li>
+                                        <li>Send test email to verify everything works</li>
+                                        <li>Run the campaign to send emails to your leads</li>
+                                    </ol>
+                                    
+                                    <h6 class="mt-3">Notes:</h6>
+                                    <ul>
+                                        <li>Emails are sent in stages, with follow-ups scheduled automatically</li>
+                                        <li>Each email includes a link to the lead's custom website template</li>
+                                        <li>The system rotates through email accounts to avoid spam filters</li>
+                                        <li>Check the campaign history table to monitor results</li>
+                                    </ul>
+                                    
+                                    <div class="mt-3">
+                                        <a href="{{ url_for('index') }}" class="btn btn-primary w-100">Back to Main Dashboard</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize tooltips
+            var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+            var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+                return new bootstrap.Tooltip(tooltipTriggerEl)
+            });
+            
+            // Email campaign status updates
+            function updateEmailStatus() {
+                fetch('/email_status')
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.is_running) {
+                            // Show progress container
+                            document.getElementById('email-progress-container').style.display = 'block';
+                            
+                            // Update stats
+                            document.getElementById('email-sent-count').textContent = data.sent;
+                            document.getElementById('email-total-count').textContent = data.total;
+                            document.getElementById('email-error-count').textContent = data.errors;
+                            document.getElementById('current-account').textContent = data.current_account;
+                            document.getElementById('current-stage').textContent = data.current_stage;
+                            document.getElementById('last-update').textContent = data.last_update;
+                            
+                            // Update progress bar
+                            const percent = data.total > 0 ? (data.sent / data.total * 100) : 0;
+                            document.getElementById('email-progress-bar').style.width = percent + '%';
+                            
+                            // Check again in 2 seconds
+                            setTimeout(updateEmailStatus, 2000);
+                        } else if ({{ 'true' if progress.is_running else 'false' }}) {
+                            // Refresh the page to show final results if we were running
+                            window.location.reload();
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error updating email status:', error);
+                        setTimeout(updateEmailStatus, 5000);
+                    });
+            }
+            
+            // Start the update loop if we're running
+            if ({{ 'true' if progress.is_running else 'false' }}) {
+                updateEmailStatus();
+            }
+        });
+    </script>
+</body>
+</html>

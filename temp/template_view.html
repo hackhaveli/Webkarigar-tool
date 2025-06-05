@@ -1,0 +1,69 @@
+<!-- New List View with table layout -->
+<div id="listView" class="animate__animated animate__fadeIn">
+    {% if websites %}
+        <div class="template-table bg-white rounded shadow-sm">
+            <div class="p-3 bg-light border-bottom">
+                <h5 class="mb-0 d-flex align-items-center">
+                    <i class='bx bx-folder me-2'></i> website_templates_{{ generation_date|replace('-', '') }}
+                </h5>
+            </div>
+            
+            <table class="table table-hover mb-0">
+                <thead class="table-light">
+                    <tr>
+                        <th scope="col">Domain Name</th>
+                        <th scope="col" class="text-end">Template Styles</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for website in websites %}
+                    <tr class="template-site-item" data-site-name="{{ website.business_name }}">
+                        <td>
+                            <div class="d-flex align-items-center">
+                                <div class="website-icon me-3 bg-light rounded p-2">
+                                    <i class='bx bx-globe fs-4'></i>
+                                </div>
+                                <div>
+                                    <h6 class="mb-0">{{ website.business_name }}</h6>
+                                    <small class="text-muted">{{ website.folder_name }}</small>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="d-flex gap-2 justify-content-end">
+                                <a href="{{ url_for('temp_templates', filename='website_templates_' + generation_date|replace('-', '') + '/' + website.folder_name + '/modern/index.html') }}" 
+                                   class="btn btn-sm btn-outline-primary" target="_blank" title="Modern Template">
+                                    <i class='bx bx-cube'></i> Modern
+                                </a>
+                                <a href="{{ url_for('temp_templates', filename='website_templates_' + generation_date|replace('-', '') + '/' + website.folder_name + '/elegant/index.html') }}" 
+                                   class="btn btn-sm btn-outline-primary" target="_blank" title="Elegant Template">
+                                    <i class='bx bx-diamond'></i> Elegant
+                                </a>
+                                <a href="{{ url_for('temp_templates', filename='website_templates_' + generation_date|replace('-', '') + '/' + website.folder_name + '/minimalist/index.html') }}" 
+                                   class="btn btn-sm btn-outline-primary" target="_blank" title="Minimalist Template">
+                                    <i class='bx bx-minus-circle'></i> Minimalist
+                                </a>
+                                <a href="{{ url_for('download_templates', business_name=website.business_name) }}" 
+                                   class="btn btn-sm btn-success" title="Download All Templates">
+                                    <i class='bx bx-download'></i>
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% else %}
+        <div class="col-12">
+            <div class="alert alert-info text-center p-5">
+                <i class='bx bx-info-circle bx-lg mb-3'></i>
+                <h3>No templates found</h3>
+                <p>Generate templates first by clicking the "Generate Templates" button on the dashboard.</p>
+                <a href="{{ url_for('index') }}" class="btn btn-primary mt-3">
+                    <i class='bx bx-home'></i> Go to Dashboard
+                </a>
+            </div>
+        </div>
+    {% endif %}
+</div> 

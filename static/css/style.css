@@ -1,0 +1,89 @@
+/* General Styles */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f8f9fa;
+}
+
+/* Sidebar */
+.sidebar {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 100;
+    padding: 48px 0 0;
+    box-shadow: inset -1px 0 0 rgba(0, 0, 0, .1);
+}
+
+.sidebar .nav-link {
+    font-weight: 500;
+    color: rgba(255, 255, 255, .75);
+    padding: .75rem 1rem;
+    transition: all 0.3s;
+}
+
+.sidebar .nav-link:hover {
+    color: #fff;
+    background-color: rgba(255, 255, 255, .1);
+}
+
+.sidebar .nav-link.active {
+    color: #fff;
+    background-color: rgba(255, 255, 255, .2);
+}
+
+.sidebar .nav-link i {
+    margin-right: 10px;
+}
+
+/* Dashboard cards */
+.card {
+    box-shadow: 0 4px 6px rgba(0, 0, 0, .1);
+    transition: all 0.3s;
+    margin-bottom: 20px;
+}
+
+.card:hover {
+    box-shadow: 0 10px 15px rgba(0, 0, 0, .15);
+    transform: translateY(-2px);
+}
+
+.card-header {
+    font-weight: bold;
+}
+
+/* Tables */
+.table {
+    background-color: #fff;
+    border-radius: 5px;
+}
+
+/* Badges and status indicators */
+.badge {
+    padding: 6px 10px;
+    font-weight: 500;
+}
+
+/* Animations */
+.animate__animated {
+    animation-duration: 0.7s;
+}
+
+/* Modal styles */
+.modal-content {
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, .2);
+}
+
+.modal-header {
+    border-radius: 10px 10px 0 0;
+}
+
+/* Custom utility classes */
+.text-small {
+    font-size: 0.9rem;
+}
+
+.bg-gradient-primary {
+    background: linear-gradient(45deg, #007bff, #0056b3);
+}

@@ -1,0 +1,28 @@
+                                    <span class="template-style-badge {% if style.name == 'Modern' %}modern-badge{% elif style.name == 'Elegant' %}elegant-badge{% elif style.name == 'Minimalist' %}minimalist-badge{% endif %}">
+                                        {% if style.name == 'Modern' %}
+                                            <i class='bx bx-cube'></i>
+                                        {% elif style.name == 'Elegant' %}
+                                            <i class='bx bx-diamond'></i>
+                                        {% elif style.name == 'Minimalist' %}
+                                            <i class='bx bx-minus-circle'></i>
+                                        {% endif %}
+                                        {{ style.name }}
+                                    </span>
+                                    
+                                    {% if style.thumbnail %}
+                                        <img src="{{ url_for('temp_templates', filename=style.path|replace('index.html', style.thumbnail)) }}" 
+                                             class="img-fluid" alt="{{ style.name }} template preview">
+                                    {% else %}
+                                        <div class="placeholder-preview text-center">
+                                            <i class='bx bx-image'></i>
+                                            <h5>{{ style.name }} Template</h5>
+                                            <p class="text-muted">Click to view</p>
+                                        </div>
+                                    {% endif %}
+                                    
+                                    <div class="overlay">
+                                        <a href="{{ url_for('temp_templates', filename=style.path) }}" 
+                                           class="btn btn-lg btn-open" target="_blank">
+                                            <i class='bx bx-link-external me-2'></i> Open Template
+                                        </a>
+                                    </div> 

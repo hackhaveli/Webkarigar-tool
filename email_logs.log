@@ -1,0 +1,110 @@
+2025-04-20 17:58:39,556 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2025-04-20 17:58:39,557 - INFO - [33mPress CTRL+C to quit[0m
+2025-04-20 17:58:39,560 - INFO -  * Restarting with stat
+2025-04-20 17:58:41,017 - WARNING -  * Debugger is active!
+2025-04-20 17:58:41,025 - INFO -  * Debugger PIN: 644-134-113
+2025-04-20 17:58:52,565 - INFO - 127.0.0.1 - - [20/Apr/2025 17:58:52] "GET / HTTP/1.1" 200 -
+2025-04-20 17:58:52,838 - INFO - 127.0.0.1 - - [20/Apr/2025 17:58:52] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+2025-04-20 17:58:57,962 - INFO - 127.0.0.1 - - [20/Apr/2025 17:58:57] "POST /preview HTTP/1.1" 200 -
+2025-04-20 17:59:09,756 - INFO - 127.0.0.1 - - [20/Apr/2025 17:59:09] "POST /preview HTTP/1.1" 200 -
+2025-04-20 17:59:09,760 - INFO - 127.0.0.1 - - [20/Apr/2025 17:59:09] "POST /preview HTTP/1.1" 200 -
+2025-04-20 17:59:13,719 - INFO - 127.0.0.1 - - [20/Apr/2025 17:59:13] "POST /preview HTTP/1.1" 200 -
+2025-04-20 17:59:14,586 - INFO - 127.0.0.1 - - [20/Apr/2025 17:59:14] "POST /preview HTTP/1.1" 200 -
+2025-04-20 17:59:23,583 - INFO - 127.0.0.1 - - [20/Apr/2025 17:59:23] "POST /preview HTTP/1.1" 200 -
+2025-04-20 17:59:24,434 - INFO - 127.0.0.1 - - [20/Apr/2025 17:59:24] "POST /preview HTTP/1.1" 200 -
+2025-04-20 18:02:46,662 - INFO -  * Detected change in 'C:\\Users\\Admin\\Pictures\\pubg2 - Copy\\pubg2\\scrappper-new-final\\email_sender.py', reloading
+2025-04-20 18:02:46,845 - INFO -  * Restarting with stat
+2025-04-20 18:02:48,132 - WARNING -  * Debugger is active!
+2025-04-20 18:02:48,136 - INFO -  * Debugger PIN: 644-134-113
+2025-04-20 18:03:34,918 - INFO -  * Detected change in 'C:\\Users\\Admin\\Pictures\\pubg2 - Copy\\pubg2\\scrappper-new-final\\email_sender.py', reloading
+2025-04-20 18:03:35,066 - INFO -  * Restarting with stat
+2025-04-20 18:03:36,398 - WARNING -  * Debugger is active!
+2025-04-20 18:03:36,402 - INFO -  * Debugger PIN: 644-134-113
+2025-04-20 18:03:48,230 - INFO -  * Detected change in 'C:\\Users\\Admin\\Pictures\\pubg2 - Copy\\pubg2\\scrappper-new-final\\email_sender.py', reloading
+2025-04-20 18:03:48,369 - INFO -  * Restarting with stat
+2025-04-20 18:03:49,681 - WARNING -  * Debugger is active!
+2025-04-20 18:03:49,685 - INFO -  * Debugger PIN: 644-134-113
+2025-04-20 18:05:04,667 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2025-04-20 18:05:04,667 - INFO - [33mPress CTRL+C to quit[0m
+2025-04-20 18:05:04,670 - INFO -  * Restarting with stat
+2025-04-20 18:05:06,055 - WARNING -  * Debugger is active!
+2025-04-20 18:05:06,062 - INFO -  * Debugger PIN: 644-134-113
+2025-04-20 18:05:17,293 - INFO - 127.0.0.1 - - [20/Apr/2025 18:05:17] "GET / HTTP/1.1" 200 -
+2025-04-20 18:05:35,904 - INFO - 127.0.0.1 - - [20/Apr/2025 18:05:35] "POST /preview HTTP/1.1" 200 -
+2025-04-20 18:05:53,376 - INFO - 127.0.0.1 - - [20/Apr/2025 18:05:53] "POST /preview HTTP/1.1" 200 -
+2025-04-20 18:05:59,930 - INFO - 127.0.0.1 - - [20/Apr/2025 18:05:59] "POST /preview HTTP/1.1" 200 -
+2025-04-20 18:06:01,143 - INFO - 127.0.0.1 - - [20/Apr/2025 18:06:01] "POST /preview HTTP/1.1" 200 -
+2025-04-20 18:06:20,866 - INFO - Email sent successfully to rohits.codegenius@gmail.com
+2025-04-20 18:06:22,915 - INFO - Email sent successfully to coderrohit2927@gmail.com
+2025-04-20 18:06:22,930 - INFO - 127.0.0.1 - - [20/Apr/2025 18:06:22] "POST /send HTTP/1.1" 200 -
+2025-04-20 18:06:36,901 - INFO - 127.0.0.1 - - [20/Apr/2025 18:06:36] "GET /logs HTTP/1.1" 200 -
+2025-04-20 18:10:30,531 - INFO -  * Detected change in 'C:\\Users\\Admin\\Pictures\\pubg2 - Copy\\pubg2\\scrappper-new-final\\email_sender.py', reloading
+2025-04-20 18:10:30,690 - INFO -  * Restarting with stat
+2025-04-20 18:10:32,194 - WARNING -  * Debugger is active!
+2025-04-20 18:10:32,202 - INFO -  * Debugger PIN: 644-134-113
+2025-04-20 18:11:22,121 - INFO -  * Detected change in 'C:\\Users\\Admin\\Pictures\\pubg2 - Copy\\pubg2\\scrappper-new-final\\email_sender.py', reloading
+2025-04-20 18:11:22,260 - INFO -  * Restarting with stat
+2025-04-20 18:11:23,644 - WARNING -  * Debugger is active!
+2025-04-20 18:11:23,648 - INFO -  * Debugger PIN: 644-134-113
+2025-04-20 18:11:50,654 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2025-04-20 18:11:50,654 - INFO - [33mPress CTRL+C to quit[0m
+2025-04-20 18:11:50,656 - INFO -  * Restarting with stat
+2025-04-20 18:11:52,046 - WARNING -  * Debugger is active!
+2025-04-20 18:11:52,050 - INFO -  * Debugger PIN: 644-134-113
+2025-04-20 18:12:16,363 - INFO - 127.0.0.1 - - [20/Apr/2025 18:12:16] "GET / HTTP/1.1" 200 -
+2025-04-20 18:12:58,253 - INFO - 127.0.0.1 - - [20/Apr/2025 18:12:58] "POST /send HTTP/1.1" 200 -
+2025-04-20 18:13:02,333 - INFO - 127.0.0.1 - - [20/Apr/2025 18:13:02] "GET / HTTP/1.1" 200 -
+2025-04-20 18:13:15,016 - INFO - Connecting to smtp.hostinger.com:465 for info@jede-website-info.de
+2025-04-20 18:13:15,796 - INFO - Logging in with info@jede-website-info.de and password
+2025-04-20 18:13:16,202 - INFO - Sending email from info@jede-website-info.de to rohits.codegenius@gmail.com
+2025-04-20 18:13:17,533 - INFO - Email sent successfully to rohits.codegenius@gmail.com
+2025-04-20 18:13:17,535 - INFO - Connecting to smtp.hostinger.com:465 for info@jede-website-info.de
+2025-04-20 18:13:18,252 - INFO - Logging in with info@jede-website-info.de and password
+2025-04-20 18:13:18,659 - INFO - Sending email from info@jede-website-info.de to coderrohit2927@gmail.com
+2025-04-20 18:13:19,953 - INFO - Email sent successfully to coderrohit2927@gmail.com
+2025-04-20 18:13:19,954 - INFO - 127.0.0.1 - - [20/Apr/2025 18:13:19] "POST /send HTTP/1.1" 200 -
+2025-04-20 18:15:14,682 - INFO - 127.0.0.1 - - [20/Apr/2025 18:15:14] "GET / HTTP/1.1" 200 -
+2025-04-20 18:15:48,872 - INFO - 127.0.0.1 - - [20/Apr/2025 18:15:48] "GET / HTTP/1.1" 200 -
+2025-04-20 18:15:50,584 - INFO - 127.0.0.1 - - [20/Apr/2025 18:15:50] "GET / HTTP/1.1" 200 -
+2025-04-20 18:16:07,751 - INFO - Connecting to smtp.strato.de:465 for info@email-jede-website.de
+2025-04-20 18:16:08,441 - INFO - Logging in with info@email-jede-website.de and password
+2025-04-20 18:16:08,848 - INFO - Sending email from info@email-jede-website.de to rohit.codegenius@gmail.com
+2025-04-20 18:16:10,282 - INFO - Email sent successfully to rohit.codegenius@gmail.com
+2025-04-20 18:16:10,284 - INFO - Connecting to smtp.strato.de:465 for info@email-jede-website.de
+2025-04-20 18:16:10,999 - INFO - Logging in with info@email-jede-website.de and password
+2025-04-20 18:16:11,510 - INFO - Sending email from info@email-jede-website.de to coderrohit2927@gmail.com
+2025-04-20 18:16:12,536 - INFO - Email sent successfully to coderrohit2927@gmail.com
+2025-04-20 18:16:12,537 - INFO - 127.0.0.1 - - [20/Apr/2025 18:16:12] "POST /send HTTP/1.1" 200 -
+2025-04-20 18:16:55,142 - INFO - 127.0.0.1 - - [20/Apr/2025 18:16:55] "GET / HTTP/1.1" 200 -
+2025-04-20 18:17:11,876 - INFO - 127.0.0.1 - - [20/Apr/2025 18:17:11] "POST /preview HTTP/1.1" 200 -
+2025-04-20 18:17:15,224 - INFO - 127.0.0.1 - - [20/Apr/2025 18:17:15] "POST /preview HTTP/1.1" 200 -
+2025-04-20 18:17:27,315 - INFO - Connecting to smtp.hostinger.com:465 for info@jede-website-info.de
+2025-04-20 18:17:28,108 - INFO - Logging in with info@jede-website-info.de and password
+2025-04-20 18:17:28,519 - INFO - Sending email from info@jede-website-info.de to rohit.codegenius@gmail.com
+2025-04-20 18:17:29,744 - INFO - Email sent successfully to rohit.codegenius@gmail.com
+2025-04-20 18:17:29,747 - INFO - Connecting to smtp.hostinger.com:465 for info@jede-website-info.de
+2025-04-20 18:17:30,364 - INFO - Logging in with info@jede-website-info.de and password
+2025-04-20 18:17:30,769 - INFO - Sending email from info@jede-website-info.de to coderrohit2927@gmail.com
+2025-04-20 18:17:31,896 - INFO - Email sent successfully to coderrohit2927@gmail.com
+2025-04-20 18:17:31,898 - INFO - 127.0.0.1 - - [20/Apr/2025 18:17:31] "POST /send HTTP/1.1" 200 -
+2025-04-20 18:22:32,765 - INFO -  * Detected change in 'C:\\Users\\Admin\\Pictures\\pubg2 - Copy\\pubg2\\scrappper-new-final\\app.py', reloading
+2025-04-20 18:22:32,952 - INFO -  * Restarting with stat
+2025-04-20 18:22:34,248 - WARNING -  * Debugger is active!
+2025-04-20 18:22:34,252 - INFO -  * Debugger PIN: 644-134-113
+2025-04-20 18:24:08,687 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2025-04-20 18:24:08,687 - INFO - [33mPress CTRL+C to quit[0m
+2025-04-20 18:24:08,689 - INFO -  * Restarting with stat
+2025-04-20 18:24:09,973 - WARNING -  * Debugger is active!
+2025-04-20 18:24:09,977 - INFO -  * Debugger PIN: 644-134-113
+2025-04-20 18:24:22,196 - INFO - 127.0.0.1 - - [20/Apr/2025 18:24:22] "GET / HTTP/1.1" 200 -
+2025-04-20 18:24:24,854 - INFO - 127.0.0.1 - - [20/Apr/2025 18:24:24] "GET / HTTP/1.1" 200 -
+2025-04-20 18:24:25,250 - INFO - 127.0.0.1 - - [20/Apr/2025 18:24:25] "GET / HTTP/1.1" 200 -
+2025-04-20 18:24:25,487 - INFO - 127.0.0.1 - - [20/Apr/2025 18:24:25] "GET / HTTP/1.1" 200 -
+2025-04-20 18:26:04,956 - INFO -  * Detected change in 'C:\\Users\\Admin\\Pictures\\pubg2 - Copy\\pubg2\\scrappper-new-final\\email_sender.py', reloading
+2025-04-20 18:26:05,147 - INFO -  * Restarting with stat
+2025-04-20 18:26:05,172 - INFO -  * Detected change in 'C:\\Users\\Admin\\Pictures\\pubg2 - Copy\\pubg2\\scrappper-new-final\\email_sender.py', reloading
+2025-04-20 18:26:05,354 - INFO -  * Restarting with stat
